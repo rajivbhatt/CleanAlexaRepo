@@ -59,30 +59,48 @@ sfdc_amazon.addRoutes(app,oauth_timeout,true);
 var intent_functions = new Array();
 intent_functions['AddPost'] = AddPost;
 
-
-function GetLatestCases(req,res,intent) {
-	org.apexRest({oauth:intent.oauth, uri:'EchoCaseSearch'},
+function AddPost(req,res,intent) {
+		var post = intent.slots.post.value;
+    	console.log("CHATTER POST>>>>"+post);
+    	org.apexRest({oauth:intent.oauth, uri:'EchoCaseSearch',method:'POST',body:'{"CaseIdentifier":null}'},
 		function(err,result) {
 			if(err) {
               console.log(err);
               send_alexa_error(res,'An error occured checking for recents cases: '+err);
             }
             else {
-            	var speech = "Here are your latest cases. ";
-            	for(var i = 0; i < result.length; i++) {
-                      speech += 'Case Number ';
-                      speech += i+1;
-                      speech += '. .';
-                      speech += result[i].Subject__c;
-                      speech += '. .';
-                      if(i != result.length-1) {speech += 'Next case,'};
-                    }
-                    send_alexa_response(res, speech, 'Salesforce', 'Get Latest Cases', 'Success', false);
+          		  
+          		  if(post == 'follow up') {
+		            post = 'We need to follow up with the customer';
+		          }
+
+		          if(post == 'next' || post == 'next meeting') {
+		            post = 'This needs to be prioritized at the next meeting';
+		          }
+
+		          if(post == 'cannot replicate') {
+		            post = 'I cannot replicate this issue with the current information';
+		          }
+
+		          if(post == 'missing info') {
+		            post = 'This case is incomplete, we need more information';
+		          }
+
+		          
+		          org.chatter.postFeedItem({id: result.Case__c, text: post, oauth: intent.oauth}, function(err, resp) {
+		              if(err) {
+		                console.log(err);
+		                send_alexa_error(res,'An error occured posting to Chatter: '+err);
+		              } else {
+		                send_alexa_response(res, 'Posted to Chatter', 'Salesforce', 'Post to Chatter', 'Posted to Chatter: '+post, false);
+		              }
+		          });
+
+
             }
 
-		});
+		});  
 }
-
 
 
 
