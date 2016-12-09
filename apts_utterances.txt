@@ -1,0 +1,3 @@
+CreateFavoriteQuote create favorite quote
+CreateFavoriteQuote create my favorite quote
+CreateFavoriteQuote create my favorite quote and email it to me
