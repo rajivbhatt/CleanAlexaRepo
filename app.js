@@ -58,6 +58,7 @@ sfdc_amazon.addRoutes(app,oauth_timeout,true);
 /* List of identifiable intent / actions that the route will respond to */
 var intent_functions = new Array();
 intent_functions['AddPost'] = AddPost;
+intent_functions['CreateFavoriteQuote'] = GetQuotes;
 
 function AddPost(req,res,intent) {
 		var post = intent.slots.post.value;
@@ -99,9 +100,26 @@ function AddPost(req,res,intent) {
 
             }
 
-		});  
+		});
 }
 
+
+function GetQuotes(req,res,intent) {
+	var post = intent.slots.post.value;
+	console.log("CHATTER POST>>>>"+post);
+	
+	org.apexRest({oauth:intent.oauth, uri:'EchoCaseSearch',method:'POST',body:'{"CaseIdentifier":null}'},
+	function(err,result) {
+		if(err) {
+		  console.log(err);
+		  send_alexa_error(res,'An error occured checking for recents cases: '+err);
+		}else{	
+
+			send_alexa_response(res, 'Posted to Chatter', 'Salesforce', 'Post to Chatte', 'Quote with '+ post, false);
+
+		}
+	});
+}
 
 
 //setup actual server
