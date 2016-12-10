@@ -96,7 +96,7 @@ function GetCancelledAssets(req,res,intent) {
 
 function GetEscalatedCases(req,res,intent) {
   console.log('GetEscalatedCases called ');
-	org.apexRest({oauth:intent.oauth, uri:'EchoEscalatedCases',method:'GET',
+	org.apexRest({oauth:intent.oauth, uri:'EchoEscalatedCases',method:'GET'}, 
 	function(err,result) {
 		if(err) {
 		  console.log(err);
