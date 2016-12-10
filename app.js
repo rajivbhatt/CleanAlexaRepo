@@ -59,9 +59,10 @@ sfdc_amazon.addRoutes(app,oauth_timeout,true);
 var intent_functions = new Array();
 intent_functions['PleaseWait'] = PleaseWait;
 intent_functions['CreateFavoriteQuote'] = CreateFavoriteQuotes;
+intent_functions['GetRenewalAssets'] = GetRenewalAssets;
+intent_functions['GetCancelledAssets'] = GetCancelledAssets;
 
-function CreateFavoriteQuotes(req, res, intent) {
-	
+function CreateFavoriteQuotes(req, res, intent) {	
 	console.log("intent " + intent.slots);
 	console.log("intent " + intent.slots.account);
 	var post = intent.slots.account.value;
@@ -80,6 +81,14 @@ function CreateFavoriteQuotes(req, res, intent) {
 
 function PleaseWait(req,res,intent) {
   send_alexa_response(res, 'Waiting', 'APTTUS', '...', 'Waiting', false);
+}
+
+function GetRenewalAssets(req,res,intent) {
+  send_alexa_response(res, 'Number of Renewal Assets are 5', 'APTTUS', '...', 'Renewal', false);
+}
+
+function GetCancelledAssets(req,res,intent) {
+  send_alexa_response(res, 'Number of Cancelled Assets are 2', 'APTTUS', '...', 'Cancelled', false);
 }
 
 //setup actual server
