@@ -120,14 +120,14 @@ function GetExpiredAgreementsFor(req,res,intent) {
 	var accountName = intent.slots.account.value;
 	console.log("Account Name>>>>"+accountName);
 	
-	org.apexRest({oauth:intent.oauth, uri:'EchoEscalatedCases',method:'GET',body:'{"accountName":"'+accountName+'"}'}, 
+	org.apexRest({oauth:intent.oauth, uri:'EchoExpireAgrementAccount',method:'POST',body:'{"accountName":"'+accountName+'"}'}, 
 	function(err,result) {
 		if(err) {
 		  console.log(err);
-		  send_alexa_error(res,'An error occured in getting number of escalated cases for account '+err);
+		  send_alexa_error(res,'An error occured in getting number of Expired Agreements for account '+err);
 		}else{	
-			console.log(result);	
-			send_alexa_response(res, accountName + ' has ' + result + ' Number of Escalated cases', 'APTTUS', '...', 'EscalatedCases ', false);
+		  console.log(result);	
+		  send_alexa_response(res, accountName + ' has ' + result + ' Number of Expired Agreements', 'APTTUS', '...', 'EscalatedCases ', false);
 		}
 	});
 }
@@ -139,14 +139,14 @@ function GetExpiredAgreementDetails(req,res,intent) {
 	var accountName = intent.slots.account.value;
 	console.log("Account Name>>>>"+accountName);
 	
-	org.apexRest({oauth:intent.oauth, uri:'EchoCase',method:'GET',body:'{"accountName":"'+accountName+'"}'}, 
+	org.apexRest({oauth:intent.oauth, uri:'EchoExpireAgrementReason',method:'POST',body:'{"accountName":"'+accountName+'"}'}, 
 	function(err,result) {
 		if(err) {
 		  console.log(err);
-		  send_alexa_error(res,'An error occured in getting number of escalated cases for account '+err);
+		  send_alexa_error(res,'An error occured in getting number of Expired Agreements for account '+err);
 		}else{	
-			console.log(result);	
-			send_alexa_response(res, accountName + ' has ' + result + ' Number of Escalated cases', 'APTTUS', '...', 'EscalatedCases ', false);
+		  console.log(result);	
+		  send_alexa_response(res, accountName + ' has ' + result + ' Number of Expired Agreements', 'APTTUS', '...', 'EscalatedCases ', false);
 		}
 	});
 }
