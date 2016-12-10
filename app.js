@@ -95,7 +95,17 @@ function GetCancelledAssets(req,res,intent) {
 }
 
 function GetEscalatedCases(req,res,intent) {
-  send_alexa_response(res, 'Number of Escalated cases are 4', 'APTTUS', '...', 'EscalatedCases', false);
+  console.log('GetEscalatedCases called ');
+	org.apexRest({oauth:intent.oauth, uri:'EchoEscalatedCases',method:'GET',
+	function(err,result) {
+		if(err) {
+		  console.log(err);
+		  send_alexa_error(res,'An error occured while creating favorite quote: '+err);
+		}else{	
+			console.log(result);	
+			send_alexa_response(res, 'Number of Escalated cases are '+ result, 'APTTUS', '...', 'EscalatedCases ', false);
+		}
+	});
 }
 
 function GetEscalatedCasesFor(req,res,intent) {
