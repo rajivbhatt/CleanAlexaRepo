@@ -57,6 +57,7 @@ sfdc_amazon.addRoutes(app,oauth_timeout,true);
 
 /* List of identifiable intent / actions that the route will respond to */
 var intent_functions = new Array();
+intent_functions['PleaseWait'] = PleaseWait;
 intent_functions['CreateFavoriteQuote'] = CreateFavoriteQuotes;
 
 function CreateFavoriteQuotes(req, res, intent) {
@@ -72,11 +73,14 @@ function CreateFavoriteQuotes(req, res, intent) {
 		  console.log(err);
 		  send_alexa_error(res,'An error occured while creating favorite quote: '+err);
 		}else{	
-		send_alexa_response(res, 'Created Favorite Quote for '+post, 'Salesforce', 'Create Favorite Quote', 'Quote for '+ post, false);
+		send_alexa_response(res, 'Created Favorite Quote for '+post, 'APTTUS', 'Create Favorite Quote', 'Quote for '+ post, false);
 		}
 	});
 }
 
+function PleaseWait(req,res,intent) {
+  send_alexa_response(res, 'Waiting', 'APTTUS', '...', 'Waiting', false);
+}
 
 //setup actual server
 var server = app.listen(port, function () {
@@ -90,7 +94,7 @@ var server = app.listen(port, function () {
 
 /* UTILIY FUNCTIONS */
 function send_alexa_error(res,message) {
-	send_alexa_response(res, 'An error occured during that request.  Please see the app log.', 'Salesforce', 'Error', message, true);
+	send_alexa_response(res, 'An error occured during that request.  Please see the app log.', 'APTTUS', 'Error', message, true);
 }
 
 function send_alexa_response(res, speech, title, subtitle, content, endSession) {
@@ -113,9 +117,9 @@ function route_alexa_begin(req, res) {
    
    alexa.launchRequest(req.body);
    if(req.body.session == null || req.body.session.user == null || req.body.session.user.accessToken == null) {
-        send_alexa_response(res, 'Please log into Salesforce', 'Salesforce', 'Not Logged In', 'Error: Not Logged In', true);
+        send_alexa_response(res, 'Please log into Salesforce', 'APTTUS', 'Not Logged In', 'Error: Not Logged In', true);
    } else {
-   		send_alexa_response(res, 'Connected to Salesforce',  'Salesforce', 'Connection Attempt', 'Logged In (Single User)', false);
+   		send_alexa_response(res, 'Connected to Salesforce',  'APTTUS', 'Connection Attempt', 'Logged In (Single User)', false);
    }
    
    console.log('!----REQUEST SESSION--------!');
@@ -128,7 +132,7 @@ function route_alexa_begin(req, res) {
 function route_alexa_intent(req, res) {
 
    if(req.body.session == null || req.body.session.user == null || req.body.session.user.accessToken == null) {
-        send_alexa_response(res, 'Please log into Salesforce', 'Salesforce', 'Not Logged In', 'Error: Not Logged In', true);
+        send_alexa_response(res, 'Please log into Salesforce', 'APTTUS', 'Not Logged In', 'Error: Not Logged In', true);
    } else {
    	   intent = new alexa.intentRequest(req.body);
 	   intent.oauth = sfdc_amazon.splitToken(req.body.session.user.accessToken);
