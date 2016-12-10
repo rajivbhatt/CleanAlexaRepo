@@ -59,11 +59,10 @@ sfdc_amazon.addRoutes(app,oauth_timeout,true);
 var intent_functions = new Array();
 intent_functions['PleaseWait'] = PleaseWait;
 intent_functions['CreateFavoriteQuote'] = CreateFavoriteQuotes;
-intent_functions['GetRenewalAssets'] = GetRenewalAssets;
-intent_functions['GetCancelledAssets'] = GetCancelledAssets;
-intent_functions['GetEscalatedCases'] = GetEscalatedCases;
-intent_functions['GetEscalatedCasesFor'] = GetEscalatedCasesFor;
-intent_functions['GetCasesDetails'] = GetCasesDetails;
+intent_functions['GetExpiredAgreements'] = GetExpiredAgreements;
+intent_functions['GetExpiredAgreementsOnToday'] = GetExpiredAgreementsOnToday;
+intent_functions['GetExpiredAgreementsFor'] = GetExpiredAgreementsFor;
+intent_functions['GetExpiredAgreementDetails'] = GetExpiredAgreementDetails;
 
 function CreateFavoriteQuotes(req, res, intent) {	
 	console.log("intent " + intent.slots);
@@ -86,16 +85,8 @@ function PleaseWait(req,res,intent) {
   send_alexa_response(res, 'Waiting', 'APTTUS', '...', 'Waiting', false);
 }
 
-function GetRenewalAssets(req,res,intent) {
-  send_alexa_response(res, 'Number of Renewal Assets are 5', 'APTTUS', '...', 'Renewal', false);
-}
-
-function GetCancelledAssets(req,res,intent) {
-  send_alexa_response(res, 'Number of Cancelled Assets are 2', 'APTTUS', '...', 'Cancelled', false);
-}
-
-function GetEscalatedCases(req,res,intent) {
-  console.log('GetEscalatedCases called ');
+function GetExpiredAgreements(req,res,intent) {
+  console.log('GetExpiredAgreements called ');
 	org.apexRest({oauth:intent.oauth, uri:'EchoEscalatedCases',method:'GET'}, 
 	function(err,result) {
 		if(err) {
@@ -108,8 +99,22 @@ function GetEscalatedCases(req,res,intent) {
 	});
 }
 
-function GetEscalatedCasesFor(req,res,intent) {
-  	console.log('GetEscalatedCasesFor called ');
+function GetExpiredAgreementsOnToday(req,res,intent) {
+  console.log('GetExpiredAgreementsOnToday called ');
+	org.apexRest({oauth:intent.oauth, uri:'EchoEscalatedCases',method:'GET'}, 
+	function(err,result) {
+		if(err) {
+		  console.log(err);
+		  send_alexa_error(res,'An error occured getting number of escalated cases: '+err);
+		}else{	
+			console.log(result);	
+			send_alexa_response(res, 'Number of Escalated cases are '+ result, 'APTTUS', '...', 'EscalatedCases ', false);
+		}
+	});
+}
+
+function GetExpiredAgreementsFor(req,res,intent) {
+  	console.log('GetExpiredAgreementsFor called ');
 	console.log("intent " + intent.slots);
 	console.log("intent " + intent.slots.account);
 	var accountName = intent.slots.account.value;
@@ -127,8 +132,8 @@ function GetEscalatedCasesFor(req,res,intent) {
 	});
 }
 
-function GetCasesDetails(req,res,intent) {
-	console.log('GetCasesDetails called ');
+function GetExpiredAgreementDetails(req,res,intent) {
+	console.log('GetExpiredAgreementDetails called ');
 	console.log("intent " + intent.slots);
 	console.log("intent " + intent.slots.account);
 	var accountName = intent.slots.account.value;
