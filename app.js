@@ -61,6 +61,9 @@ intent_functions['PleaseWait'] = PleaseWait;
 intent_functions['CreateFavoriteQuote'] = CreateFavoriteQuotes;
 intent_functions['GetRenewalAssets'] = GetRenewalAssets;
 intent_functions['GetCancelledAssets'] = GetCancelledAssets;
+intent_functions['GetEscalatedCases'] = GetEscalatedCases;
+intent_functions['GetEscalatedCasesFor'] = GetEscalatedCasesFor;
+intent_functions['GetCasesDetails'] = GetCasesDetails;
 
 function CreateFavoriteQuotes(req, res, intent) {	
 	console.log("intent " + intent.slots);
@@ -91,6 +94,18 @@ function GetCancelledAssets(req,res,intent) {
   send_alexa_response(res, 'Number of Cancelled Assets are 2', 'APTTUS', '...', 'Cancelled', false);
 }
 
+function GetEscalatedCases(req,res,intent) {
+  send_alexa_response(res, 'Number of Escalated cases are 4', 'APTTUS', '...', 'EscalatedCases', false);
+}
+
+function GetEscalatedCasesFor(req,res,intent) {
+  send_alexa_response(res, intent + ' has 3 escalated cases', 'APTTUS', '...', 'EscalatedCasesFor', false);
+}
+
+function GetCasesDetails(req,res,intent) {
+  send_alexa_response(res, 'Details of ' + intent + 'not found. Please try again', 'APTTUS', '...', 'CaseDetails', false);
+}
+
 //setup actual server
 var server = app.listen(port, function () {
   console.log('Salesforce Case Echo running on '+port);
@@ -98,8 +113,6 @@ var server = app.listen(port, function () {
     console.log('addr: '+add);
   });
 });
-
-
 
 /* UTILIY FUNCTIONS */
 function send_alexa_error(res,message) {
