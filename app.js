@@ -57,68 +57,22 @@ sfdc_amazon.addRoutes(app,oauth_timeout,true);
 
 /* List of identifiable intent / actions that the route will respond to */
 var intent_functions = new Array();
-intent_functions['AddPost'] = AddPost;
-intent_functions['CreateFavoriteQuote'] = GetFavoriteQuotes;
+intent_functions['CreateFavoriteQuote'] = CreateFavoriteQuotes;
 
-function AddPost(req,res,intent) {
-		var post = intent.slots.post.value;
-    	console.log("CHATTER POST>>>>"+post);
-    	org.apexRest({oauth:intent.oauth, uri:'EchoCaseSearch',method:'POST',body:'{"CaseIdentifier":null}'},
-		function(err,result) {
-			if(err) {
-              console.log(err);
-              send_alexa_error(res,'An error occured checking for recents cases: '+err);
-            }
-            else {
-          		  
-          		  if(post == 'follow up') {
-		            post = 'We need to follow up with the customer';
-		          }
-
-		          if(post == 'next' || post == 'next meeting') {
-		            post = 'This needs to be prioritized at the next meeting';
-		          }
-
-		          if(post == 'cannot replicate') {
-		            post = 'I cannot replicate this issue with the current information';
-		          }
-
-		          if(post == 'missing info') {
-		            post = 'This case is incomplete, we need more information';
-		          }
-
-		          
-		          org.chatter.postFeedItem({id: result.Case__c, text: post, oauth: intent.oauth}, function(err, resp) {
-		              if(err) {
-		                console.log(err);
-		                send_alexa_error(res,'An error occured posting to Chatter: '+err);
-		              } else {
-		                send_alexa_response(res, 'Posted to Chatter', 'Salesforce', 'Post to Chatter', 'Posted to Chatter: '+post, false);
-		              }
-		          });
-
-
-            }
-
-		});
-}
-
-
-function GetFavoriteQuotes(req,res,intent) {
+function CreateFavoriteQuotes(req, res, intent) {
+	
 	console.log("intent " + intent.slots);
 	console.log("intent " + intent.slots.account);
 	var post = intent.slots.account.value;
-	console.log("CHATTER POST>>>>"+post);
+	console.log("Account Name>>>>"+post);
 	
-	org.apexRest({oauth:intent.oauth, uri:'EchoFavoriteQuote',method:'POST'},
+	org.apexRest({oauth:intent.oauth, uri:'EchoFavoriteQuote',method:'POST', body:'{"accountName":"'+post+'"}'},
 	function(err,result) {
 		if(err) {
 		  console.log(err);
-		  send_alexa_error(res,'An error occured checking for recents cases: '+err);
+		  send_alexa_error(res,'An error occured while creating favorite quote: '+err);
 		}else{	
-
-			send_alexa_response(res, 'Posted to Chatter', 'Salesforce', 'Post to Chatte', 'Quote with '+ post, false);
-
+		send_alexa_response(res, 'Created Favorite Quote', 'Salesforce', 'Create Favorite Quote', 'Quote with '+ post, false);
 		}
 	});
 }
