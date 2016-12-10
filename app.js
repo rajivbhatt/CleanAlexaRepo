@@ -87,28 +87,28 @@ function PleaseWait(req,res,intent) {
 
 function GetExpiredAgreements(req,res,intent) {
   console.log('GetExpiredAgreements called ');
-	org.apexRest({oauth:intent.oauth, uri:'EchoEscalatedCases',method:'GET'}, 
+	org.apexRest({oauth:intent.oauth, uri:'GetExpiredAgreements',method:'GET'}, 
 	function(err,result) {
 		if(err) {
 		  console.log(err);
-		  send_alexa_error(res,'An error occured getting number of escalated cases: '+err);
+		  send_alexa_error(res,'An error occured getting number of expired agreement: '+err);
 		}else{	
-			console.log(result);	
-			send_alexa_response(res, 'Number of Escalated cases are '+ result, 'APTTUS', '...', 'EscalatedCases ', false);
+		  console.log(result);	
+		  send_alexa_response(res, 'Number of expired agreements are '+ result, 'APTTUS', '...', 'ExpiredAgreements', false);
 		}
 	});
 }
 
 function GetExpiredAgreementsOnToday(req,res,intent) {
   console.log('GetExpiredAgreementsOnToday called ');
-	org.apexRest({oauth:intent.oauth, uri:'EchoEscalatedCases',method:'GET'}, 
+	org.apexRest({oauth:intent.oauth, uri:'GetExpiredAgreementsOnToday',method:'GET'}, 
 	function(err,result) {
 		if(err) {
 		  console.log(err);
-		  send_alexa_error(res,'An error occured getting number of escalated cases: '+err);
+		  send_alexa_error(res,'An error occured getting number of Expired Agreements Today: '+err);
 		}else{	
 			console.log(result);	
-			send_alexa_response(res, 'Number of Escalated cases are '+ result, 'APTTUS', '...', 'EscalatedCases ', false);
+			send_alexa_response(res, 'Number of Expired Agreements Today are '+ result, 'APTTUS', '...', 'EscalatedCases ', false);
 		}
 	});
 }
