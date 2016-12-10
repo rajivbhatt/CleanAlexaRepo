@@ -185,7 +185,8 @@ function route_alexa_intent(req, res) {
 		intent_function = intent_functions[intent.intentName];
 		intent_function(req,res,intent);	
 	   }else{
-		console.log("Intent not found" + intent.intentName);	
+		console.log("Intent not found" + intent.intentName);
+		send_alexa_error(res, "Intent not found" + intent.intentName)
 	   }	
    }
 
