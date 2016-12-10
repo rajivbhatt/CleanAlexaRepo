@@ -105,7 +105,7 @@ function AddPost(req,res,intent) {
 
 
 function GetQuotes(req,res,intent) {
-	console.log("intent " + intent);
+	console.log("intent " + intent.slots);
 	var post = intent.slots.account.value;
 	console.log("CHATTER POST>>>>"+post);
 	
