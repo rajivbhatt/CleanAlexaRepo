@@ -105,7 +105,7 @@ function AddPost(req,res,intent) {
 
 
 function GetQuotes(req,res,intent) {
-	var post = intent.slots.post.value;
+	var post = ''; //= intent.slots.post.value;
 	console.log("CHATTER POST>>>>"+post);
 	
 	org.apexRest({oauth:intent.oauth, uri:'EchoCaseSearch',method:'POST',body:'{"CaseIdentifier":null}'},
