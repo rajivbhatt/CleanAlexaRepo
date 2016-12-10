@@ -100,7 +100,7 @@ function GetEscalatedCases(req,res,intent) {
 	function(err,result) {
 		if(err) {
 		  console.log(err);
-		  send_alexa_error(res,'An error occured while creating favorite quote: '+err);
+		  send_alexa_error(res,'An error occured getting number of escalated cases: '+err);
 		}else{	
 			console.log(result);	
 			send_alexa_response(res, 'Number of Escalated cases are '+ result, 'APTTUS', '...', 'EscalatedCases ', false);
@@ -109,11 +109,41 @@ function GetEscalatedCases(req,res,intent) {
 }
 
 function GetEscalatedCasesFor(req,res,intent) {
-  send_alexa_response(res, intent + ' has 3 escalated cases', 'APTTUS', '...', 'EscalatedCasesFor', false);
+  	console.log('GetEscalatedCasesFor called ');
+	console.log("intent " + intent.slots);
+	console.log("intent " + intent.slots.account);
+	var accountName = intent.slots.account.value;
+	console.log("Account Name>>>>"+accountName);
+	
+	org.apexRest({oauth:intent.oauth, uri:'EchoEscalatedCases',method:'GET',body:'{"accountName":"'+accountName+'"}'}, 
+	function(err,result) {
+		if(err) {
+		  console.log(err);
+		  send_alexa_error(res,'An error occured in getting number of escalated cases for account '+err);
+		}else{	
+			console.log(result);	
+			send_alexa_response(res, accountName + ' has ' + result + ' Number of Escalated cases', 'APTTUS', '...', 'EscalatedCases ', false);
+		}
+	});
 }
 
 function GetCasesDetails(req,res,intent) {
-  send_alexa_response(res, 'Details of ' + intent + 'not found. Please try again', 'APTTUS', '...', 'CaseDetails', false);
+	console.log('GetCasesDetails called ');
+	console.log("intent " + intent.slots);
+	console.log("intent " + intent.slots.account);
+	var accountName = intent.slots.account.value;
+	console.log("Account Name>>>>"+accountName);
+	
+	org.apexRest({oauth:intent.oauth, uri:'EchoCase',method:'GET',body:'{"accountName":"'+accountName+'"}'}, 
+	function(err,result) {
+		if(err) {
+		  console.log(err);
+		  send_alexa_error(res,'An error occured in getting number of escalated cases for account '+err);
+		}else{	
+			console.log(result);	
+			send_alexa_response(res, accountName + ' has ' + result + ' Number of Escalated cases', 'APTTUS', '...', 'EscalatedCases ', false);
+		}
+	});
 }
 
 //setup actual server
