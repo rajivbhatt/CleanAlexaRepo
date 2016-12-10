@@ -72,7 +72,7 @@ function CreateFavoriteQuotes(req, res, intent) {
 		  console.log(err);
 		  send_alexa_error(res,'An error occured while creating favorite quote: '+err);
 		}else{	
-		send_alexa_response(res, 'Created Favorite Quote', 'Salesforce', 'Create Favorite Quote', 'Quote with '+ post, false);
+		send_alexa_response(res, 'Created Favorite Quote for '+post, 'Salesforce', 'Create Favorite Quote', 'Quote for '+ post, false);
 		}
 	});
 }
