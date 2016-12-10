@@ -58,7 +58,7 @@ sfdc_amazon.addRoutes(app,oauth_timeout,true);
 /* List of identifiable intent / actions that the route will respond to */
 var intent_functions = new Array();
 intent_functions['AddPost'] = AddPost;
-intent_functions['CreateFavoriteQuote'] = GetQuotes;
+intent_functions['CreateFavoriteQuote'] = GetFavoriteQuotes;
 
 function AddPost(req,res,intent) {
 		var post = intent.slots.post.value;
@@ -104,7 +104,7 @@ function AddPost(req,res,intent) {
 }
 
 
-function GetQuotes(req,res,intent) {
+function GetFavoriteQuotes(req,res,intent) {
 	console.log("intent " + intent.slots);
 	console.log("intent " + intent.slots.account);
 	var post = intent.slots.account.value;
@@ -181,8 +181,12 @@ function route_alexa_intent(req, res) {
 	   console.log("INTENT>>>"+intent.intentName);
 	   console.log("USERID>>>>"+req.body.session.user.userId);
 
-	   intent_function = intent_functions[intent.intentName];
-	   intent_function(req,res,intent);
+	  if(intent_functions[intent.intentName]){
+		intent_function = intent_functions[intent.intentName];
+		intent_function(req,res,intent);	
+	   }else{
+		console.log("Intent not found" + intent.intentName);	
+	   }	
    }
 
 };
